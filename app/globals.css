@@ -51,6 +51,7 @@
 
 @layer base {
   body {
-    @apply bg-[#F8F8F8] text-foreground;
+    background-color: #F8F8F8;
+    color: hsl(var(--foreground));
   }
 }
