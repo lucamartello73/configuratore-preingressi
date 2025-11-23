@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -51,7 +47,9 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 142 76% 44%;
   }
-  
+}
+
+@layer base {
   body {
     @apply bg-[#F8F8F8] text-foreground;
   }
