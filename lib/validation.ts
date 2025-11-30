@@ -7,52 +7,40 @@ import { z } from "zod";
 export const ConfigurazioneSchema = z.object({
   // Step 1: Misure e Struttura Base
   larghezza: z
-    .number({
-      required_error: "La larghezza è obbligatoria",
-      invalid_type_error: "La larghezza deve essere un numero",
-    })
-    .min(150, "La larghezza minima è 150 cm")
-    .max(600, "La larghezza massima è 600 cm"),
+    .number({ message: "La larghezza deve essere un numero" })
+    .min(150, { message: "La larghezza minima è 150 cm" })
+    .max(600, { message: "La larghezza massima è 600 cm" }),
 
   profondita: z
-    .number({
-      required_error: "La profondità è obbligatoria",
-      invalid_type_error: "La profondità deve essere un numero",
-    })
-    .min(100, "La profondità minima è 100 cm")
-    .max(400, "La profondità massima è 400 cm"),
+    .number({ message: "La profondità deve essere un numero" })
+    .min(100, { message: "La profondità minima è 100 cm" })
+    .max(400, { message: "La profondità massima è 400 cm" }),
 
   altezza: z
-    .number({
-      required_error: "L'altezza è obbligatoria",
-      invalid_type_error: "L'altezza deve essere un numero",
-    })
-    .min(180, "L'altezza minima è 180 cm")
-    .max(300, "L'altezza massima è 300 cm"),
+    .number({ message: "L'altezza deve essere un numero" })
+    .min(180, { message: "L'altezza minima è 180 cm" })
+    .max(300, { message: "L'altezza massima è 300 cm" }),
 
   tipologia: z.enum(["indipendente", "addossato"], {
-    required_error: "La tipologia è obbligatoria",
-    invalid_type_error: "Tipologia non valida",
+    message: "La tipologia deve essere 'indipendente' o 'addossato'",
   }),
 
   // Step 2: Tipologia Struttura
   coibentato: z.boolean().default(false),
 
   materiale: z.enum(["legno", "pvc", "metallo"], {
-    required_error: "Il materiale è obbligatorio",
-    invalid_type_error: "Materiale non valido",
+    message: "Il materiale deve essere 'legno', 'pvc' o 'metallo'",
   }),
 
   finitura: z.enum(["naturale", "impregnato", "verniciato"], {
-    required_error: "La finitura è obbligatoria",
-    invalid_type_error: "Finitura non valida",
+    message: "La finitura deve essere 'naturale', 'impregnato' o 'verniciato'",
   }),
 
   // Step 3: Serramenti
   numeroFinestre: z
-    .number()
-    .min(0, "Il numero di finestre non può essere negativo")
-    .max(10, "Numero massimo di finestre: 10")
+    .number({ message: "Il numero di finestre deve essere un numero" })
+    .min(0, { message: "Il numero di finestre non può essere negativo" })
+    .max(10, { message: "Numero massimo di finestre: 10" })
     .default(0),
 
   tipoFinestre: z.enum(["vasistas", "battente", "fisse"]).optional(),
@@ -65,16 +53,16 @@ export const ConfigurazioneSchema = z.object({
     "doppia_cieca",
     "doppia_vetro",
   ], {
-    required_error: "Il tipo di porta è obbligatorio",
+    message: "Tipo di porta non valido",
   }),
 
   // Step 4: Copertura
   tipoTetto: z.enum(["monofalda", "doppia_falda"], {
-    required_error: "Il tipo di tetto è obbligatorio",
+    message: "Il tipo di tetto deve essere 'monofalda' o 'doppia_falda'",
   }),
 
   tipoCopertura: z.enum(["telo_bitumato", "tegola_canadese", "lamiera_grecata"], {
-    required_error: "Il tipo di copertura è obbligatorio",
+    message: "Il tipo di copertura non è valido",
   }),
 
   grondaie: z.boolean().default(false),
@@ -90,18 +78,16 @@ export const ConfigurazioneSchema = z.object({
 
   pensilina: z.boolean().default(false),
 
-  altriOptional: z.string().max(1000, "Testo troppo lungo (max 1000 caratteri)").default(""),
+  altriOptional: z.string().max(1000, { message: "Testo troppo lungo (max 1000 caratteri)" }).default(""),
 
   // Step 6: Zona e Posa
   provincia: z
-    .string({
-      required_error: "La provincia è obbligatoria",
-    })
-    .min(2, "Provincia non valida")
-    .max(50, "Provincia troppo lunga"),
+    .string({ message: "La provincia è obbligatoria" })
+    .min(2, { message: "Provincia non valida" })
+    .max(50, { message: "Provincia troppo lunga" }),
 
   accessibilita: z.enum(["camion", "muletto", "manuale"], {
-    required_error: "L'accessibilità è obbligatoria",
+    message: "L'accessibilità deve essere 'camion', 'muletto' o 'manuale'",
   }),
 
   posaInclusa: z.boolean().default(false),
@@ -110,28 +96,24 @@ export const ConfigurazioneSchema = z.object({
 
   // Dati Cliente
   nomeCliente: z
-    .string({
-      required_error: "Il nome è obbligatorio",
-    })
-    .min(2, "Il nome deve contenere almeno 2 caratteri")
-    .max(255, "Il nome è troppo lungo"),
+    .string({ message: "Il nome è obbligatorio" })
+    .min(2, { message: "Il nome deve contenere almeno 2 caratteri" })
+    .max(255, { message: "Il nome è troppo lungo" }),
 
   emailCliente: z
-    .string({
-      required_error: "L'email è obbligatoria",
-    })
-    .email("Email non valida")
-    .max(255, "Email troppo lunga"),
+    .string({ message: "L'email è obbligatoria" })
+    .email({ message: "Email non valida" })
+    .max(255, { message: "Email troppo lunga" }),
 
   telefonoCliente: z
     .string()
-    .max(50, "Telefono troppo lungo")
+    .max(50, { message: "Telefono troppo lungo" })
     .optional()
     .or(z.literal("")),
 
   noteCliente: z
     .string()
-    .max(2000, "Note troppo lunghe (max 2000 caratteri)")
+    .max(2000, { message: "Note troppo lunghe (max 2000 caratteri)" })
     .optional()
     .or(z.literal("")),
 
