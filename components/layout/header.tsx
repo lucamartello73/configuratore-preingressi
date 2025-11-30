@@ -1,50 +1,121 @@
 "use client";
 
-import { Phone, Mail, Facebook, Instagram, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="w-full">
-      {/* Top Bar Verde */}
-      <div className="bg-[#6AB52B] text-white py-2">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-sm">
-          <div className="flex items-center gap-4">
-            <a href="tel:+390185167566" className="flex items-center gap-1 hover:opacity-80 transition">
-              <Phone className="w-4 h-4" />
-              <span>+39 0185 167566</span>
-            </a>
-            <a href="mailto:soluzioni@martello1930.net" className="flex items-center gap-1 hover:opacity-80 transition">
-              <Mail className="w-4 h-4" />
-              <span className="hidden sm:inline">soluzioni@martello1930.net</span>
-            </a>
-          </div>
-          <div className="flex items-center gap-3">
-            <a href="https://facebook.com/martello1930" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">
-              <Facebook className="w-4 h-4" />
-            </a>
-            <a href="https://instagram.com/martello1930" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href="https://wa.me/390185167566" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition">
-              <MessageCircle className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
+    <header
+      id="site-header"
+      style={{
+        width: "100%",
+        fontFamily: "system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+        borderBottom: "1px solid #e5e5e5"
+      }}
+    >
+      {/* barra verde alta */}
+      <div
+        style={{
+          background: "#4CAF50",
+          color: "white",
+          fontSize: "14px",
+          padding: "6px 32px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
+        }}
+      >
+        <span>📞 +39 0185 167566</span>
+        <span>•</span>
+        <span>✉ soluzioni@martello1930.net</span>
       </div>
 
-      {/* Main Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl md:text-3xl font-bold text-gray-800">MARTELLO1930</span>
+      {/* header principale */}
+      <div
+        style={{
+          background: "#fff",
+          padding: "14px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
+        {/* logo */}
+        <div
+          style={{
+            fontSize: "22px",
+            fontWeight: 700,
+            letterSpacing: "0.08em"
+          }}
+        >
+          MARTELLO<span style={{ color: "#4CAF50" }}>1930</span>
+        </div>
+
+        {/* navigazione */}
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+            fontSize: "15px"
+          }}
+        >
+          <Link href="/" style={{ textDecoration: "none", color: "#333" }}>
+            Home
           </Link>
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-gray-600 hover:text-[#6AB52B] transition">Home</Link>
-            <Link href="/configuratore" className="text-gray-600 hover:text-[#6AB52B] transition">Configuratore</Link>
-            <Link href="/contatti" className="text-gray-600 hover:text-[#6AB52B] transition">Contatti</Link>
-          </nav>
+          <Link href="/configuratore" style={{ textDecoration: "none", color: "#333" }}>
+            Configuratore
+          </Link>
+          <Link href="/admin" style={{ textDecoration: "none", color: "#333" }}>
+            Admin
+          </Link>
+          <Link
+            href="/richiedi-preventivo"
+            style={{
+              background: "#4CAF50",
+              color: "#fff",
+              padding: "8px 16px",
+              borderRadius: "999px",
+              fontWeight: 600,
+              textDecoration: "none"
+            }}
+          >
+            Richiedi Preventivo
+          </Link>
+        </nav>
+
+        {/* social */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontSize: "20px"
+          }}
+        >
+          <a
+            href="https://www.facebook.com/Martello1930/"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            👍
+          </a>
+
+          <a
+            href="https://www.instagram.com/1930martello/"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            📷
+          </a>
+
+          <a href="#" style={{ color: "#4CAF50", textDecoration: "none" }}>
+            🎵
+          </a>
+
+          <a
+            href="https://wa.me/39018541793"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            💬
+          </a>
         </div>
       </div>
     </header>

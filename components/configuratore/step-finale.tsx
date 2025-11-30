@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConfigurazionePreingresso } from "@/lib/types";
-import { CheckCircle2, ArrowLeft, Send, User } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Send, User, AlertCircle, Loader2 } from "lucide-react";
 
 interface StepFinaleProps {
   config: Partial<ConfigurazionePreingresso>;
@@ -18,21 +18,61 @@ interface StepFinaleProps {
 export function StepFinale({ config, updateConfig, prevStep }: StepFinaleProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
 
   const handleSubmit = async () => {
+    // Reset errors
+    setError(null);
+    setValidationErrors({});
+
+    // Basic validation
     if (!config.nomeCliente || !config.emailCliente) {
-      alert("Compila almeno nome e email per procedere");
+      setError("Compila almeno nome e email per procedere");
       return;
     }
 
     setIsSubmitting(true);
 
-    // Simulazione invio (qui va integrato Supabase)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // API call
+      const response = await fetch("/api/preventivi", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(config),
+      });
 
-    console.log("Configurazione inviata:", config);
-    setIsSubmitting(false);
-    setSubmitted(true);
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Gestione errori specifici
+        if (response.status === 400 && data.details) {
+          // Errori di validazione Zod
+          setValidationErrors(data.details);
+          setError("Alcuni campi contengono errori. Controlla il riepilogo.");
+        } else if (response.status === 429) {
+          // Rate limit
+          setError(data.message || "Troppi tentativi. Riprova tra qualche minuto.");
+        } else {
+          // Errore generico
+          setError(data.error || "Si è verificato un errore. Riprova.");
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Successo
+      console.log("Preventivo inviato con successo:", data);
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Errore invio preventivo:", err);
+      setError(
+        "Errore di connessione. Controlla la tua connessione internet e riprova."
+      );
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -75,6 +115,32 @@ export function StepFinale({ config, updateConfig, prevStep }: StepFinaleProps) 
 
   return (
     <div className="space-y-6">
+      {/* Error Alert */}
+      {error && (
+        <Card className="bg-red-50 border-red-200 rounded-2xl">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-900 mb-1">
+                  Errore nell'invio
+                </h3>
+                <p className="text-sm text-red-800">{error}</p>
+                {Object.keys(validationErrors).length > 0 && (
+                  <ul className="mt-2 space-y-1 text-xs text-red-700">
+                    {Object.entries(validationErrors).map(([field, errors]) => (
+                      <li key={field}>
+                        <strong className="capitalize">{field}:</strong> {errors.join(", ")}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Riepilogo Configurazione */}
       <Card className="bg-white rounded-2xl shadow-md">
         <CardHeader>
@@ -260,8 +326,17 @@ export function StepFinale({ config, updateConfig, prevStep }: StepFinaleProps) 
           className="bg-[#6AB52B] hover:bg-[#5A9823] text-white px-8"
           disabled={isSubmitting || !config.nomeCliente || !config.emailCliente}
         >
-          {isSubmitting ? "Invio in corso..." : "Invia Richiesta"}
-          <Send className="ml-2 w-5 h-5" />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+              Invio in corso...
+            </>
+          ) : (
+            <>
+              Invia Richiesta
+              <Send className="ml-2 w-5 h-5" />
+            </>
+          )}
         </Button>
       </div>
     </div>
