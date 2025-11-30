@@ -85,10 +85,12 @@ export function middleware(request: NextRequest) {
   // Rate limiting solo per API routes
   if (pathname.startsWith("/api/")) {
     // Identificatore: IP address o fallback
-    const identifier =
-      request.ip ||
-      request.headers.get("x-forwarded-for")?.split(",")[0] ||
-      request.headers.get("x-real-ip") ||
+    // Note: request.ip is available in Edge Runtime but not in Node runtime
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const realIp = request.headers.get("x-real-ip");
+    const identifier = 
+      forwardedFor?.split(",")[0] ||
+      realIp ||
       "anonymous";
 
     // Controlla rate limit
