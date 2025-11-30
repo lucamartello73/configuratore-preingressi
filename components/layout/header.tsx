@@ -4,135 +4,120 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <>
-      <style dangerouslySetInnerHTML={{__html: `
-        .site-header {
-          width: 100%;
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          border-bottom: 1px solid #e5e5e5;
-        }
+    <header
+      id="site-header"
+      style={{
+        width: "100%",
+        fontFamily: "system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+        borderBottom: "1px solid #e5e5e5"
+      }}
+    >
+      {/* barra verde alta */}
+      <div
+        style={{
+          background: "#4CAF50",
+          color: "white",
+          fontSize: "14px",
+          padding: "6px 32px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
+        }}
+      >
+        <span>📞 +39 0185 167566</span>
+        <span>•</span>
+        <span>✉ soluzioni@martello1930.net</span>
+      </div>
 
-        .site-header .top-bar {
-          background-color: #4CAF50;
-          color: #ffffff;
-          font-size: 14px;
-          padding: 6px 32px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 8px;
-        }
-
-        .site-header .top-bar span {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .site-header .main-header {
-          background-color: #ffffff;
-          padding: 14px 32px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 24px;
-        }
-
-        .site-header .logo {
-          font-size: 22px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-        }
-
-        .site-header .logo span {
-          color: #4CAF50;
-        }
-
-        .site-header .main-nav {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          font-size: 15px;
-        }
-
-        .site-header .main-nav a {
-          text-decoration: none;
-          color: #333333;
-          padding: 4px 0;
-        }
-
-        .site-header .main-nav a:hover {
-          color: #4CAF50;
-        }
-
-        .site-header .main-nav .btn-primary {
-          background-color: #4CAF50;
-          color: #ffffff;
-          padding: 8px 16px;
-          border-radius: 999px;
-          font-weight: 600;
-        }
-
-        .site-header .main-nav .btn-primary:hover {
-          opacity: 0.9;
-        }
-
-        .site-header .social-icons {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 18px;
-        }
-
-        .site-header .social-icons a {
-          text-decoration: none;
-          color: #4CAF50;
-        }
-
-        .site-header .social-icons a:hover {
-          opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-          .site-header .main-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-          }
-          .site-header .main-nav {
-            flex-wrap: wrap;
-            gap: 12px;
-          }
-        }
-      `}} />
-
-      <header className="site-header">
-        <div className="top-bar">
-          <span>📞 +39 0185 167566</span>
-          <span>•</span>
-          <span>✉ soluzioni@martello1930.net</span>
+      {/* header principale */}
+      <div
+        style={{
+          background: "#fff",
+          padding: "14px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
+        {/* logo */}
+        <div
+          style={{
+            fontSize: "22px",
+            fontWeight: 700,
+            letterSpacing: "0.08em"
+          }}
+        >
+          MARTELLO<span style={{ color: "#4CAF50" }}>1930</span>
         </div>
 
-        <div className="main-header">
-          <div className="logo">
-            MARTELLO<span>1930</span>
-          </div>
+        {/* navigazione */}
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+            fontSize: "15px"
+          }}
+        >
+          <Link href="/" style={{ textDecoration: "none", color: "#333" }}>
+            Home
+          </Link>
+          <Link href="/configuratore" style={{ textDecoration: "none", color: "#333" }}>
+            Configuratore
+          </Link>
+          <Link href="/admin" style={{ textDecoration: "none", color: "#333" }}>
+            Admin
+          </Link>
+          <Link
+            href="/richiedi-preventivo"
+            style={{
+              background: "#4CAF50",
+              color: "#fff",
+              padding: "8px 16px",
+              borderRadius: "999px",
+              fontWeight: 600,
+              textDecoration: "none"
+            }}
+          >
+            Richiedi Preventivo
+          </Link>
+        </nav>
 
-          <nav className="main-nav">
-            <Link href="/">Home</Link>
-            <Link href="/configuratore">Configuratore</Link>
-            <Link href="/admin">Admin</Link>
-            <Link href="/richiedi-preventivo" className="btn-primary">Richiedi Preventivo</Link>
-          </nav>
+        {/* social */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontSize: "20px"
+          }}
+        >
+          <a
+            href="https://www.facebook.com/Martello1930/"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            👍
+          </a>
 
-          <div className="social-icons">
-            <a href="https://www.facebook.com/Martello1930/" aria-label="Facebook">👍</a>
-            <a href="https://www.instagram.com/1930martello/" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="TikTok">🎵</a>
-            <a href="https://wa.me/39018541793" aria-label="WhatsApp">💬</a>
-          </div>
+          <a
+            href="https://www.instagram.com/1930martello/"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            📷
+          </a>
+
+          <a href="#" style={{ color: "#4CAF50", textDecoration: "none" }}>
+            🎵
+          </a>
+
+          <a
+            href="https://wa.me/39018541793"
+            style={{ color: "#4CAF50", textDecoration: "none" }}
+          >
+            💬
+          </a>
         </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 }
