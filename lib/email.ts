@@ -1,7 +1,10 @@
 import { Resend } from "resend";
 import { ValidatedConfigurazione } from "./validation";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend only if API key is available (not during build time)
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 /**
  * Email di conferma al cliente
@@ -11,6 +14,12 @@ export async function sendClientConfirmation(
   config: ValidatedConfigurazione,
   preventivoId?: string
 ) {
+  // Check if Resend is configured
+  if (!resend) {
+    console.warn("Resend API key not configured. Skipping email send.");
+    throw new Error("Email service not configured. Please add RESEND_API_KEY environment variable.");
+  }
+
   try {
     const { data, error } = await resend.emails.send({
       from: "Martello1930 <preventivi@martello1930.net>",
@@ -40,6 +49,12 @@ export async function sendAdminNotification(
   config: ValidatedConfigurazione,
   preventivoId?: string
 ) {
+  // Check if Resend is configured
+  if (!resend) {
+    console.warn("Resend API key not configured. Skipping email send.");
+    throw new Error("Email service not configured. Please add RESEND_API_KEY environment variable.");
+  }
+
   try {
     const { data, error } = await resend.emails.send({
       from: "Configuratore <sistema@martello1930.net>",
