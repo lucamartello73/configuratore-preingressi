@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Progress } from "@/components/ui/progress";
 import { ConfigurazionePreingresso } from "@/lib/types";
 
 // Import steps
@@ -46,7 +44,6 @@ export default function ConfiguratorePage() {
   });
 
   const totalSteps = 7;
-  const progress = (currentStep / totalSteps) * 100;
 
   const updateConfig = (updates: Partial<ConfigurazionePreingresso>) => {
     setConfig((prev) => ({ ...prev, ...updates }));
@@ -87,65 +84,181 @@ export default function ConfiguratorePage() {
     }
   };
 
+  const steps = [
+    { num: 1, label: "Dimensioni" },
+    { num: 2, label: "Struttura" },
+    { num: 3, label: "Tetto" },
+    { num: 4, label: "Serramenti" },
+    { num: 5, label: "Optional" },
+    { num: 6, label: "Dati Cliente" },
+    { num: 7, label: "Riepilogo" }
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Header />
       
-      <main className="flex-1">
-        {/* Hero Section */}
-        <div className="bg-white py-12 border-b">
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
-            >
-              Configura il Tuo Preingresso / Casetta
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-lg text-gray-600 max-w-3xl mx-auto"
-            >
-              Soluzioni versatili per campeggi, agriturismi e strutture ricettive.
-              Personalizza ogni dettaglio della tua struttura su misura.
-            </motion.p>
+      {/* CONFIG WRAPPER */}
+      <div 
+        style={{
+          background: "#f8f8f8",
+          padding: "40px 0",
+          fontFamily: "system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+          minHeight: "calc(100vh - 200px)"
+        }}
+      >
+        {/* STEP BAR */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "32px" }}>
+          <div style={{ display: "flex", gap: "24px" }}>
+            {steps.map((step) => {
+              const isActive = currentStep === step.num;
+              const isCompleted = currentStep > step.num;
+              
+              return (
+                <div 
+                  key={step.num}
+                  style={{ 
+                    display: "flex", 
+                    flexDirection: "column", 
+                    alignItems: "center",
+                    cursor: isCompleted ? "pointer" : "default"
+                  }}
+                  onClick={() => isCompleted && setCurrentStep(step.num)}
+                >
+                  <div 
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: isActive || isCompleted ? "#4CAF50" : "transparent",
+                      border: isActive || isCompleted ? "none" : "2px solid #ccc",
+                      color: isActive || isCompleted ? "white" : "#666",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontWeight: 600
+                    }}
+                  >
+                    {step.num}
+                  </div>
+                  <span 
+                    style={{ 
+                      fontSize: "14px", 
+                      marginTop: "6px",
+                      color: isActive ? "#4CAF50" : "#666",
+                      fontWeight: isActive ? 600 : 400
+                    }}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">
-                Step {currentStep} di {totalSteps}
-              </span>
-              <span className="text-sm font-medium text-[#6AB52B]">
-                {Math.round(progress)}%
-              </span>
+        {/* LAYOUT DUE COLONNE */}
+        <div 
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 320px",
+            gap: "32px",
+            maxWidth: "1100px",
+            margin: "0 auto",
+            padding: "0 20px"
+          }}
+        >
+          {/* COLONNA SINISTRA - FORM */}
+          <div style={{ minHeight: "500px" }}>
+            {renderStep()}
+          </div>
+
+          {/* COLONNA DESTRA - ANTEPRIMA */}
+          <div 
+            style={{
+              background: "white",
+              borderRadius: "12px",
+              padding: "20px",
+              border: "1px solid #eee",
+              height: "fit-content",
+              position: "sticky",
+              top: "20px"
+            }}
+          >
+            <h3 style={{ marginBottom: "12px", fontSize: "18px", fontWeight: 600 }}>
+              Anteprima Configurazione
+            </h3>
+            
+            {/* Preview Placeholder */}
+            <div 
+              style={{
+                width: "100%",
+                height: "200px",
+                background: "#d9ecff",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#0066cc",
+                fontSize: "14px",
+                fontWeight: 500
+              }}
+            >
+              Immagine 3D
             </div>
-            <Progress value={progress} className="h-2" />
+
+            {/* Summary */}
+            <div style={{ marginTop: "16px", fontSize: "14px" }}>
+              <div style={{ marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #eee" }}>
+                <div style={{ color: "#666", marginBottom: "4px" }}>Dimensioni</div>
+                <div style={{ fontWeight: 600 }}>
+                  {config.larghezza || 0} × {config.profondita || 0} × {config.altezza || 0} cm
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #eee" }}>
+                <div style={{ color: "#666", marginBottom: "4px" }}>Tipologia</div>
+                <div style={{ fontWeight: 600, textTransform: "capitalize" }}>
+                  {config.tipologia === "indipendente" ? "Struttura Indipendente" : "Addossato a Casetta"}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #eee" }}>
+                <div style={{ color: "#666", marginBottom: "4px" }}>Materiale</div>
+                <div style={{ fontWeight: 600, textTransform: "capitalize" }}>
+                  {config.materiale === "legno" ? "Legno Lamellare" : config.materiale === "pvc" ? "PVC" : "Metallo"}
+                </div>
+              </div>
+
+              {config.numeroFinestre && config.numeroFinestre > 0 && (
+                <div style={{ marginBottom: "12px", paddingBottom: "12px", borderBottom: "1px solid #eee" }}>
+                  <div style={{ color: "#666", marginBottom: "4px" }}>Finestre</div>
+                  <div style={{ fontWeight: 600 }}>
+                    {config.numeroFinestre} finestra/e
+                  </div>
+                </div>
+              )}
+
+              <div style={{ 
+                marginTop: "16px", 
+                padding: "12px", 
+                background: "#f0f9ff", 
+                borderRadius: "8px",
+                border: "1px solid #bae6fd"
+              }}>
+                <div style={{ fontSize: "12px", color: "#0284c7", fontWeight: 600 }}>
+                  💡 Suggerimento
+                </div>
+                <div style={{ fontSize: "12px", color: "#0c4a6e", marginTop: "4px" }}>
+                  Step {currentStep} di {totalSteps} completati
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Steps Container */}
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderStep()}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </main>
+      </div>
 
       <Footer />
-    </div>
+    </>
   );
 }
